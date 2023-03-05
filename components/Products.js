@@ -1,26 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import Product from './Product';
-
-const ALL_PRODUCTS_QUERY = gql`
-  query ALL_PRODUCTS_QUERY {
-    allProducts {
-      id
-      name
-      price
-      description
-      photo {
-        id
-        image {
-          publicUrlTransformed
-        }
-      }
-    }
-  }
-`;
+import { ALL_PRODUCTS_QUERY } from '../queries/ALL_PRODUCTS_QUERY';
 
 const ProductsListStyles = styled.div`
   display: grid;
@@ -43,7 +25,5 @@ const Products = () => {
     </div>
   );
 };
-
-Products.propTypes = {};
 
 export default Products;

@@ -1,34 +1,10 @@
 import { useMutation } from '@apollo/client';
-import gql from 'graphql-tag';
 import React from 'react';
 import useForm from '../lib/useForm';
+import { ALL_PRODUCTS_QUERY } from '../queries/ALL_PRODUCTS_QUERY';
+import { CREATE_PRODUCT_MUTATION } from '../queries/CREATE_PRODUCT_MUTATION';
 import ErrorMessage from './ErrorMessage';
 import Form from './styles/Form';
-
-const CREATE_PRODUCT_MUTATION = gql`
-  mutation CREATE_PRODUCT_MUTATION(
-    # Which variables are getting passed in? and what types are they?
-    $name: String!
-    $description: String!
-    $price: Int!
-    $image: Upload
-  ) {
-    createProduct(
-      data: {
-        name: $name
-        description: $description
-        price: $price
-        status: "AVAILABLE"
-        photo: { create: { image: $image, altText: $name } }
-      }
-    ) {
-      id
-      price
-      description
-      name
-    }
-  }
-`;
 
 const CreateProduct = () => {
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -40,7 +16,7 @@ const CreateProduct = () => {
 
   const [createProduct, { loading, error, data }] = useMutation(
     CREATE_PRODUCT_MUTATION,
-    { variables: inputs }
+    { variables: inputs, refetchQueries: [{ query: ALL_PRODUCTS_QUERY }] }
   );
 
   return (
@@ -99,9 +75,6 @@ const CreateProduct = () => {
       </fieldset>
 
       <button type="submit">+ Add Product</button>
-      <button type="button" onClick={clearForm}>
-        + clear
-      </button>
     </Form>
   );
 };
